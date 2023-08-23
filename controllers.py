@@ -25,20 +25,23 @@ def add_user_controller(data=None, cls=True):
     render_template(context={}, template="add_user.jinja2", cls=cls)
     username = input()
     user = User.add(username)
-    return 21, user  # (next state, data)
+    return 2, user  # (next state, data)
 
 
-def add_surname_controller(data=None, cls=True):
-    """"""
+def add_surname_controller(user, cls=True):
+    """Добовляет фамилию"""
     render_template(context={}, template="surname.jinja2", cls=cls)
-    username = input()
-    user = User.add(username)
-    return 21, user  # (next state, data)
+    surname = input()
+    add_surname = Surname.add(surname, user)
+    return 3, user  # (next state, data)
 
 
-def add_ssss(data=None, cls=True):
-    """"""
-    pass
+def add_fathers_name(user, cls=True):
+    """Добовляет отчество"""
+    render_template(context={}, template="fathers_name.jinja2", cls=cls)
+    fname = input()
+    add_fathers_name = NameOrganization.add(fname, user)
+    return 21, user
 
 
 def add_name_organization(user, cls=True):
@@ -72,9 +75,10 @@ controllers_dict = {  # use dict type instead of if else chain
     '0': exit_controller,
     '1': all_users_controller,
     '2': add_user_controller,
+    2: add_surname_controller,
+    3: add_fathers_name,
     21: add_phone_controller,  # user can't enter 21 of int type
     212: add_more_controller,
     222: add_name_organization,
-    221: add_surname_controller,
 
 }

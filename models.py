@@ -15,6 +15,8 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    surname = relationship("Surname", back_populates="user")
+    fathername = relationship("FathersName", back_populates="user")
     phones = relationship("Phone", back_populates="user")
     organizations = relationship("NameOrganization", back_populates='user')
 
@@ -28,19 +30,43 @@ class User(Base):
         session.commit()
         return user
 
-    # @classmethod
-    # def add_sur(cls, surname, user):
-    #     user = cls(surname=surname, user=user)
-    #     session.add(user)
-    #     session.commit()
-    #     return user
-    #
     @classmethod
     def all(cls):
         return session.query(cls).all()
 
+class Surname(Base):
+    __tablename__ = 'surname'
+    id = Column(Integer, primary_key=True)
+    sur = Column(String, nullable = False) #быть пустым запрещено
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="surname")
 
-# class Surname(Base):
+    def __str__(self):
+        return self.sur
+
+    @classmethod
+    def add(cls, sur, user):
+        sur = cls(sur=sur, user=user)
+        session.add(sur)
+        session.commit()
+        return sur
+
+class FathersName(Base):
+    __tablename__ = 'fathername'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="fathername")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def add(cls, name, user):
+        name = cls(name=name, user=user)
+        session.add(name)
+        session.commit()
+        return name
 
 class Phone(Base):
     __tablename__ = 'phones'
