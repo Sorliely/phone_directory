@@ -11,27 +11,36 @@ session = Session()
 Base = declarative_base()
 
 
-
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     phones = relationship("Phone", back_populates="user")
+    organizations = relationship("NameOrganization", back_populates='user')
 
     def __str__(self):
         return self.name
-    
+
     @classmethod
-    def add(cls, name): 
+    def add(cls, name):
         user = cls(name=name)
         session.add(user)
         session.commit()
         return user
-    
+
+    # @classmethod
+    # def add_sur(cls, surname, user):
+    #     user = cls(surname=surname, user=user)
+    #     session.add(user)
+    #     session.commit()
+    #     return user
+    #
     @classmethod
-    def all(cls): 
+    def all(cls):
         return session.query(cls).all()
 
+
+# class Surname(Base):
 
 class Phone(Base):
     __tablename__ = 'phones'
@@ -49,6 +58,24 @@ class Phone(Base):
         session.add(phone)
         session.commit()
         return phone
+
+
+class NameOrganization(Base):
+    __tablename__ = 'organizations'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="organizations")
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def add(cls, name, user):
+        name = cls(name=name, user=user)
+        session.add(name)
+        session.commit()
+        return name
 
 
 Base.metadata.create_all(engine)

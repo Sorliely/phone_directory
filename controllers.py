@@ -1,7 +1,6 @@
 from views import render_template
 
-from models import User, Phone
-
+from models import *
 
 
 def default_controller(data=None, cls=True):
@@ -17,30 +16,44 @@ def exit_controller(data=None, cls=True):
 
 def all_users_controller(data=None, cls=True):
     users = User.all()
-    render_template(context={'users':users}, template="all_users.jinja2", cls=cls)
+    render_template(context={'users': users}, template="all_users.jinja2", cls=cls)
     input("Продолжить?")
-    return 'main', None # (next state, data)
+    return 'main', None  # (next state, data)
 
 
 def add_user_controller(data=None, cls=True):
     render_template(context={}, template="add_user.jinja2", cls=cls)
     username = input()
     user = User.add(username)
-    return 21, user # (next state, data)
+    return 21, user  # (next state, data)
 
 
-def add_user_controller(data=None, cls=True):
-    render_template(context={}, template="add_user.jinja2", cls=cls)
+def add_surname_controller(data=None, cls=True):
+    """"""
+    render_template(context={}, template="surname.jinja2", cls=cls)
     username = input()
     user = User.add(username)
-    return 21, user # (next state, data)
+    return 21, user  # (next state, data)
+
+
+def add_ssss(data=None, cls=True):
+    """"""
+    pass
+
+
+def add_name_organization(user, cls=True):
+    """Добаляет название организации"""
+    render_template(context={}, template="add_organization.jinja2", cls=cls)
+    name = input()
+    add_name = NameOrganization.add(name, user)
+    return 51, user
 
 
 def add_phone_controller(user, cls=True):
     render_template(context={}, template="add_phone.jinja2", cls=cls)
     phone_number = input()
     phone = Phone.add(phone_number, user)
-    return 212, user # (next state, data)
+    return 212, user  # (next state, data)
 
 
 def add_more_controller(user, cls=True):
@@ -48,16 +61,20 @@ def add_more_controller(user, cls=True):
     answer = input()
     if answer == 'Y':
         return 21, user
-    return 51, user # (next state, data)
+    return 222, user  # (next state, data)
+
 
 def get_controller(state):
     return controllers_dict.get(state, default_controller)
 
 
-controllers_dict = { # use dict type instead of if else chain
+controllers_dict = {  # use dict type instead of if else chain
     '0': exit_controller,
     '1': all_users_controller,
     '2': add_user_controller,
-    21: add_phone_controller, # user can't enter 21 of int type
-    212: add_more_controller
+    21: add_phone_controller,  # user can't enter 21 of int type
+    212: add_more_controller,
+    222: add_name_organization,
+    221: add_surname_controller,
+
 }
