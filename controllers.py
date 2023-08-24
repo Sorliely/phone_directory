@@ -4,17 +4,21 @@ from models import *
 
 
 def default_controller(data=None, cls=True):
-    """Default controller"""
+    """Функция ожидает ввод пользователя и возвращает введенные данные вместе с None в кортеже."""
     render_template(context={}, template="default.jinja2", cls=cls)
     return (input(), None)
 
 
 def exit_controller(data=None, cls=True):
+    """Выполняет выход"""
     render_template(context={}, template="exit.jinja2", cls=cls)
     exit()
 
 
 def all_users_controller(data=None, cls=True):
+    """Функция `all_users_controller` является контроллером (компонентом управления) для отображения всех пользователей.
+    Его основная цель - получить список пользователей из базы данных (в данном случае с использованием метода `User.all()`),
+    передать этот список в шаблон `all_users.jinja2` и вызвать функцию отображения шаблона."""
     users = User.all()
     render_template(context={'users': users}, template="all_users.jinja2", cls=cls)
     input("Продолжить?")
@@ -22,6 +26,7 @@ def all_users_controller(data=None, cls=True):
 
 
 def add_user_controller(data=None, cls=True):
+    """Добовляет новое имя пользователя"""
     render_template(context={}, template="add_user.jinja2", cls=cls)
     username = input()
     user = User.add(username)
@@ -53,6 +58,7 @@ def add_name_organization(user, cls=True):
 
 
 def add_phone_controller(user, cls=True):
+    """Добовляет номер телефона пользователя"""
     render_template(context={}, template="add_phone.jinja2", cls=cls)
     phone_number = input()
     phone = Phone.add(phone_number, user)
@@ -60,6 +66,8 @@ def add_phone_controller(user, cls=True):
 
 
 def add_more_controller(user, cls=True):
+    """Проверяет нужно ли добавить еще один номер телефона (если есть)
+    если нужно добавить возвращает функцию add_phone_controller, если нет функция прекращает работу"""
     render_template(context={}, template="add_more.jinja2", cls=cls)
     answer = input()
     if answer == 'Y':
@@ -90,6 +98,9 @@ def delete_controller():
 
 
 def get_controller(state):
+    """Функция get_controller(state) возвращает контроллер, ассоциированный с заданным состоянием state.
+    Если в словаре controllers_dict найден контроллер для данного состояния, то он возвращается.
+    Если в словаре нет контроллера для данного состояния, то возвращается контроллер default_controller."""
     return controllers_dict.get(state, default_controller)
 
 

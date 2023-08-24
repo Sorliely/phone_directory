@@ -12,6 +12,7 @@ Base = declarative_base()
 
 
 class User(Base):
+    """Основная БД из этого класса идет выборка данных, кроме телефона"""
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -35,6 +36,7 @@ class User(Base):
         return session.query(cls).all()
 
 class Surname(Base):
+    """БД хранит фамилии """
     __tablename__ = 'surname'
     id = Column(Integer, primary_key=True)
     sur = Column(String, nullable = False) #быть пустым запрещено
@@ -52,6 +54,7 @@ class Surname(Base):
         return sur
 
 class FathersName(Base):
+    """БД хранит отчества"""
     __tablename__ = 'fathername'
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -69,6 +72,7 @@ class FathersName(Base):
         return name
 
 class Phone(Base):
+    """БД хранит телефоны пользователей"""
     __tablename__ = 'phones'
     id = Column(Integer, primary_key=True)
     phone = Column(String, nullable=False)
@@ -87,6 +91,7 @@ class Phone(Base):
 
 
 class NameOrganization(Base):
+    """БД хранит место работы"""
     __tablename__ = 'organizations'
     id = Column(Integer, primary_key=True)
     name = Column(String)
