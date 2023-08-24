@@ -67,6 +67,28 @@ def add_more_controller(user, cls=True):
     return 222, user  # (next state, data)
 
 
+def search_controller(user, cls=True):
+    """Ищет пользователя по номеру"""
+    render_template(context={}, template="search.jinja2", cls=cls)
+    query = input()
+    phone = session.query(Phone).join(User).filter(Phone.phone == query).first()
+    if phone:
+        print("Телефон:", phone.phone)
+        print("Имя:", phone.user.name)
+        print("Фамилия:", phone.user.surname[0])
+        print("Отчество:", phone.user.fathername)
+        print("Организация:", phone.user.organizations[0])
+
+    else:
+        print("Телефон не найден.")
+
+
+
+def delete_controller():
+    """удаляет пользователя из бд"""
+    print("удалил")
+
+
 def get_controller(state):
     return controllers_dict.get(state, default_controller)
 
@@ -75,6 +97,8 @@ controllers_dict = {  # use dict type instead of if else chain
     '0': exit_controller,
     '1': all_users_controller,
     '2': add_user_controller,
+    '3': delete_controller,
+    '4': search_controller,
     2: add_surname_controller,
     3: add_fathers_name,
     21: add_phone_controller,  # user can't enter 21 of int type

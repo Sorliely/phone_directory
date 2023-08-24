@@ -1,23 +1,14 @@
-Все записи:
-
-Всего записей - {{ users|count }}
-
-{# Перебор БД для вывод #}
+{# Перебор БД для вывода #}
 
 {% for user in users %}
-{% for surn in user.surname %}
-{% for namef in user.fathername %}
-{% for number in user.phones %}
-{% for name in user.organizations %}
-
-{# Вывод #}
-ФИО  - {{ user }}, {{ surn }}, {{namef}}:
-Телефоны:
-    {{ number }}
-
-Название организации:
-    {{name}}
+    {# Вывод #}
+    ФИО  - {{ surname }}, {{ user.name }}, {{ user.fathername }}:
+    Телефоны:
+    {% for number in user.phones %}
+        {{ number }}
     {% endfor %}
-{% endfor %}
-{% endfor %}
+    Название организации:
+    {% for name in user.organizations %}
+        {{ name }}
+    {% endfor %}
 {% endfor %}
